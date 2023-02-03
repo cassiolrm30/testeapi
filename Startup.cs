@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -41,7 +42,7 @@ namespace TesteAPI
 
             // Configuração do contexto, das interfaces e classes de repositórios
             services.AddTransient<ISwaggerProvider, SwaggerGenerator>();
-            services.AddScoped<Contexto>();
+            services.AddDbContext<Contexto>(options => options.UseSqlServer(Configuration.GetConnectionString("Conexao")));
             services.AddScoped<ITesteRepository, TesteRepository>();
         }
 

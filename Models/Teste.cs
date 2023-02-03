@@ -11,5 +11,6 @@ namespace TesteAPI.Models
         public bool Ativo { get; set; }
         public int OpcaoId { get; set; }
         public Opcao Opcao { get; set; }
+        public byte[] Arquivo { get; set; }
     }
 }
