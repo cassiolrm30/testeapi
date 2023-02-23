@@ -23,9 +23,6 @@ namespace TesteAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configuração da conexão com banco de dados
-            //services.AddDbContext<Contexto>(options => { options.UseSqlServer(Configuration.GetConnectionString("Conexao")); });
-
             // Configuração do mapper
             var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new AutomapperConfig()); });
             IMapper mapper = mapperConfig.CreateMapper();
@@ -38,14 +35,17 @@ namespace TesteAPI
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddCors(options => { options.AddPolicy("Development", buider => buider.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()); });
+            services.AddCors(options => { options.AddPolicy("Development", buider => buider.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
 
+            // Configuração da conexão com banco de dados
+            //services.AddDbContext<Contexto>(options => { options.UseSqlServer(Configuration.GetConnectionString("Conexao")); });
             // Configuração do contexto, das interfaces e classes de repositórios
             services.AddTransient<ISwaggerProvider, SwaggerGenerator>();
             services.AddDbContext<Contexto>(options => options.UseSqlServer(Configuration.GetConnectionString("Conexao")));
             services.AddScoped<ITesteRepository, TesteRepository>();
         }
 
+        [System.Obsolete]
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -56,8 +56,11 @@ namespace TesteAPI
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Teste API"); });
-            app.UseCors("Development");
-            //app.UseMvc();
+            app.UseCors("Development").UseCors(
+                    x => x.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                );
         }
     }
 }

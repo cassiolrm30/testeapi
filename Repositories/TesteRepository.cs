@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TesteAPI.Interfaces;
-using TesteAPI.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
+using TesteAPI.Interfaces;
+using TesteAPI.Models;
 
 namespace TesteAPI.Repositories
 {
@@ -23,7 +21,7 @@ namespace TesteAPI.Repositories
         }
         public override async Task<Teste> GetById(int id)
         {
-            var resultado = await Db.Testes.AsNoTracking().Include(x => x.Opcao).FirstOrDefaultAsync(x => x.Id == id);
+            var resultado = await Db.Teste.AsNoTracking().Include(x => x.Opcao).FirstOrDefaultAsync(x => x.Id == id);
             return resultado;
         }
     }
